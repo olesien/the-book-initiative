@@ -14,11 +14,11 @@ public class BookApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(BookApplication.class.getResource("books-view.fxml"));
         Parent parent = fxmlLoader.load();//Load the fxml
 
-        //BooksController controller = fxmlLoader.getController(); //Get controller ref before scene is made
+        BooksController controller = fxmlLoader.getController(); //Get controller ref before scene is made
 
         Scene scene = new Scene(parent, 600, 600);
         stage.setScene(scene);
-        //controller.init();
+        controller.init();
         stage.setTitle("Hello!");
         stage.show();
     }

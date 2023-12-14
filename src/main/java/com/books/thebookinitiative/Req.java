@@ -1,9 +1,5 @@
 package com.books.thebookinitiative;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +19,7 @@ public class Req<T> {
         return response.toString();
     }
 
-    public T get(URL url) throws IOException {
+    public String get(URL url) throws IOException {
         String METHOD = "GET";
         String AUTH_STRING = ""; // Set this as required or comment it out.
 
@@ -39,8 +35,7 @@ public class Req<T> {
         else
             response = getResponse(conn.getInputStream());
         System.out.println("Response Body: " + response);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        T thing = gson.fromJson(response, new TypeToken<T>(){}.getType());
-        return thing;
+
+        return response;
     }
 }

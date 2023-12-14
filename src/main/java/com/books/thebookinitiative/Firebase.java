@@ -4,13 +4,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class Firebase {
@@ -18,9 +13,10 @@ public class Firebase {
 
     List<String> getCategories(URL url) {
         try {
+            String res = req.get(url);
 
-            List<String> res = (List<String>) req.get(url);
-            return res;
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.fromJson(res, new TypeToken<List<String>>(){}.getType());
 
         }
         catch (IOException e) {e.printStackTrace();}
