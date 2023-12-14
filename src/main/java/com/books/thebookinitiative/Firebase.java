@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Firebase {
-    Req req = new Req<List<String>>();
+    Req req = new Req();
 
     List<String> getCategories(URL url) {
         try {

@@ -19,7 +19,7 @@ public class BookApplication extends Application {
         Scene scene = new Scene(parent, 600, 600);
         stage.setScene(scene);
         controller.init();
-        stage.setTitle("Hello!");
+        stage.setTitle("The Book Initiative");
         stage.show();
     }
 
