@@ -1,6 +1,11 @@
 package com.books.thebookinitiative;
 
+import com.books.thebookinitiative.openlibrary.Author;
+import com.books.thebookinitiative.openlibrary.Book;
+import com.books.thebookinitiative.openlibrary.BookSearch;
 import com.books.thebookinitiative.openlibrary.BooksList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -10,7 +15,6 @@ import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,9 +25,10 @@ import javafx.scene.text.TextAlignment;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -35,6 +40,8 @@ public class BooksController {
     int currentPage = 0;
 
     int per = 10;
+
+    String searchText = "";
 
     @FXML
     private TextField search;
@@ -50,76 +57,127 @@ public class BooksController {
 
     void changePange(int newPage) {
         currentPage = newPage;
-
-        fetchBooks(category.getValue().toString().toLowerCase());
+        if (search.getLength() > 0) {
+            makeSearch();
+        } else {
+            fetchBooksBySubject(category.getValue().toString().toLowerCase());
+        }
+       
     }
 
-    void fetchBooks(String subject) {
+    void renderBooks(ArrayList<Book> books, int total_books) {
+        //Clear items
+        list.getChildren().clear();
+        books.forEach(book -> {
+            Image bookCover = new Image("file:images/Preview.png", 90, 130, false, false);
+            ImageView imageView = new ImageView(bookCover);
+            VBox coverContainer = new VBox(imageView);
+            coverContainer.setPadding(new Insets(0, 10, 0, 10));
+            Text title = new Text(book.title);
+            title.setFont(new Font(20));
 
+            Text author = new Text(book.authors.get(0).name);
+            title.setFont(new Font(16));
+
+            Text desc = new Text(book.first_publish_year.toString());
+            title.setFont(new Font(14));
+
+            VBox bookInfo = new VBox(title, author, desc);
+            bookInfo.prefHeight(150);
+            bookInfo.prefWidth(236);
+            bookInfo.setSpacing(15);
+
+            //Reviews
+            Text reviewText = new Text("5 / 5");
+            reviewText.setTextAlignment(TextAlignment.CENTER);
+
+            HBox reviewIcons = new HBox();
+            reviewIcons.setAlignment(Pos.CENTER);
+
+            VBox reviews = new VBox(reviewText, reviewIcons);
+            reviews.prefHeight(150);
+            reviews.prefWidth(136);
+            reviews.setSpacing(5);
+            reviews.setAlignment(Pos.CENTER);
+
+            BorderPane item = new BorderPane();
+            item.setLeft(coverContainer);
+            item.setCenter(bookInfo);
+            item.setRight(reviews);
+
+            //Set pagination
+            Pagination pagination = new Pagination(total_books / per, currentPage);
+            app.setBottom(pagination);
+
+            pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) ->
+            {
+                pagination.setDisable(true);
+                changePange(newIndex.intValue());
+                pagination.setDisable(false);
+            });
+
+            list.getChildren().add(item);
+
+            //Load in the images later
+            new Thread(() -> {
+                Image bookCover2 = new Image(format("https://covers.openlibrary.org/b/id/%d-M.jpg", book.cover_id), 90, 130, false, false);
+                imageView.setImage(bookCover2);
+            }).start();
+
+        });
+    }
+    
+    //Handle search
+    void makeSearch() {
+        System.out.println("Started search");
+        //Set loading
+        list.getChildren().clear();
+        Text loadingText = new Text("Searching...");
+        list.getChildren().add(loadingText);
+        try {
+            BookSearch booksList = openLibraryAPI.getBooksBySearch(searchText, currentPage, per);
+
+            ArrayList<Book> books = booksList.docs.stream().map(doc -> {
+                Book book = new Book();
+                book.key = doc.key;
+                book.subject = doc.subject;
+                book.title = doc.title;
+                book.first_publish_year = doc.first_publish_year;
+                book.cover_id = doc.cover_i;
+
+                AtomicInteger i = new AtomicInteger(); //So that the index can be incremented without errors
+
+                //Change author type
+                ArrayList<Author> authors = doc.author_name.stream().map((name) -> {
+
+                    Author author = new Author();
+                    author.name = name;
+                    author.key = doc.author_key.get(i.get());
+                    i.getAndIncrement();
+                    return author;
+                }).collect(Collectors
+                        .toCollection(ArrayList::new)); ;
+                book.authors = authors;
+                return book;
+            }).collect(Collectors
+                    .toCollection(ArrayList::new)); ;
+
+            renderBooks(books, booksList.numFound);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void fetchBooksBySubject(String subject) {
+        //Set loading
+        list.getChildren().clear();
+        Text loadingText = new Text("Loading...");
+        list.getChildren().add(loadingText);
         try {
             BooksList bookslist = openLibraryAPI.getBooksBySubject(subject, currentPage, per);
 
-            //Clear items
-            list.getChildren().clear();
-
-
-            bookslist.works.forEach(book -> {
-                Image bookCover = new Image("file:images/Preview.png", 90, 130, false, false);
-                ImageView imageView = new ImageView(bookCover);
-                VBox coverContainer = new VBox(imageView);
-                coverContainer.setPadding(new Insets(0, 10, 0, 10));
-                Text title = new Text(book.title);
-                title.setFont(new Font(20));
-
-                Text author = new Text(book.authors.get(0).name);
-                title.setFont(new Font(16));
-
-                Text desc = new Text(book.first_publish_year.toString());
-                title.setFont(new Font(14));
-
-                VBox bookInfo = new VBox(title, author, desc);
-                bookInfo.prefHeight(150);
-                bookInfo.prefWidth(236);
-                bookInfo.setSpacing(15);
-
-                //Reviews
-                Text reviewText = new Text("5 / 5");
-                reviewText.setTextAlignment(TextAlignment.CENTER);
-
-                HBox reviewIcons = new HBox();
-                reviewIcons.setAlignment(Pos.CENTER);
-
-                VBox reviews = new VBox(reviewText, reviewIcons);
-                reviews.prefHeight(150);
-                reviews.prefWidth(136);
-                reviews.setSpacing(5);
-                reviews.setAlignment(Pos.CENTER);
-
-                BorderPane item = new BorderPane();
-                item.setLeft(coverContainer);
-                item.setCenter(bookInfo);
-                item.setRight(reviews);
-
-                //Set pagination
-                Pagination pagination = new Pagination(bookslist.work_count / per, currentPage);
-                app.setBottom(pagination);
-
-                pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) ->
-                {
-                    pagination.setDisable(true);
-                    changePange(newIndex.intValue());
-                    pagination.setDisable(false);
-                });
-
-                list.getChildren().add(item);
-
-                //Load in the images later
-                new Thread(() -> {
-                    Image bookCover2 = new Image(format("https://covers.openlibrary.org/b/id/%d-M.jpg", book.cover_id), 90, 130, false, false);
-                    imageView.setImage(bookCover2);
-                }).start();
-
-            });
+            renderBooks(bookslist.works, bookslist.work_count);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -142,7 +200,24 @@ public class BooksController {
         category.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
             System.out.println("CATEGORY: " + newValue.toString());
 
-            fetchBooks(newValue.toString().toLowerCase());
+            fetchBooksBySubject(newValue.toString().toLowerCase());
+        });
+
+        search.textProperty().addListener((observable, oldValue, newValue) -> {
+            searchText = newValue;
+        });
+
+        search.focusedProperty().addListener(new ChangeListener<Boolean>()
+        {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+            {
+                if (!newPropertyValue)
+                {
+                    //Out of foucs
+                    makeSearch();
+                }
+            }
         });
 
 
