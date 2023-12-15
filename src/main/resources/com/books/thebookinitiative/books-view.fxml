@@ -13,11 +13,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="375.0" prefWidth="573.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.books.thebookinitiative.BooksController">
+<?import javafx.scene.control.Pagination?>
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.books.thebookinitiative.BooksController">
   <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="368.0" prefWidth="564.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="564.0">
          <children>
-            <BorderPane layoutX="7.0" layoutY="4.0" prefHeight="360.0" prefWidth="552.0">
+            <BorderPane fx:id="app" layoutX="7.0" layoutY="4.0" prefHeight="360.0" prefWidth="552.0">
                <top>
                   <HBox alignment="CENTER" prefHeight="46.0" prefWidth="552.0" spacing="15.0" BorderPane.alignment="CENTER">
                      <children>
@@ -32,46 +33,13 @@
                <center>
                   <VBox fx:id="list" prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                           <children>
-                              <ImageView fitHeight="150.0" fitWidth="158.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../../../../../got.jpg" />
-                                 </image>
-                              </ImageView>
-                              <VBox prefHeight="150.0" prefWidth="236.0" spacing="15.0">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="A song of Fire and Ice" wrappingWidth="229.130859375">
-                                       <font>
-                                          <Font size="20.0" />
-                                       </font>
-                                    </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="By George R.R Martin" wrappingWidth="229.130859375">
-                                       <font>
-                                          <Font size="15.0" />
-                                       </font>
-                                    </Text>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="&quot;A series of epic fantasy novels&quot;" wrappingWidth="229.130859375">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Text>
-                                 </children>
-                              </VBox>
-                              <VBox alignment="CENTER" prefHeight="150.0" prefWidth="136.0">
-                                 <children>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="5 / 5" textAlignment="CENTER" wrappingWidth="135.13671875" />
-                                    <HBox alignment="CENTER" prefHeight="31.0" prefWidth="136.0">
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
+                         <Text textAlignment="CENTER">Please select a category or search something above to get started!</Text>
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </VBox>
+
                </center>
             </BorderPane>
          </children></AnchorPane>
