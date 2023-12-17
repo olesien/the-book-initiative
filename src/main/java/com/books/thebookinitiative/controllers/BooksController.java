@@ -1,5 +1,8 @@
-package com.books.thebookinitiative;
+package com.books.thebookinitiative.controllers;
 
+import com.books.thebookinitiative.BookApplication;
+import com.books.thebookinitiative.Firebase;
+import com.books.thebookinitiative.OpenLibrary;
 import com.books.thebookinitiative.openlibrary.Author;
 import com.books.thebookinitiative.openlibrary.Book;
 import com.books.thebookinitiative.openlibrary.BookSearch;
@@ -8,8 +11,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -21,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -33,6 +40,7 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 
 public class BooksController {
+    URL bookUrl;
     OpenLibrary openLibraryAPI = new OpenLibrary();
 
     Firebase firebase = new Firebase();
@@ -55,7 +63,7 @@ public class BooksController {
     @FXML
     private BorderPane app;
 
-    void changePange(int newPage) {
+    public void changePange(int newPage) {
         currentPage = newPage;
         if (search.getLength() > 0) {
             makeSearch();
@@ -65,7 +73,30 @@ public class BooksController {
        
     }
 
-    void renderBooks(ArrayList<Book> books, int total_books) {
+    void showBook() {
+        System.out.println("Change screen");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(bookUrl);
+        Stage stage = new Stage();
+        Parent parent = null;//Load the fxml
+        try {
+            parent = fxmlLoader.load();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        Image icon = new Image("file:images/bookicon.png");
+        stage.getIcons().add(icon);
+
+        BookController controller = fxmlLoader.getController(); //Get controller ref before scene is made
+
+        Scene scene = new Scene(parent, 600, 600);
+        stage.setScene(scene);
+        controller.init();
+        stage.setTitle("The Book Initiative");
+        stage.show();
+    }
+
+    public void renderBooks(ArrayList<Book> books, int total_books) {
         //Clear items
         list.getChildren().clear();
         books.forEach(book -> {
@@ -75,6 +106,10 @@ public class BooksController {
             coverContainer.setPadding(new Insets(0, 10, 0, 10));
             Text title = new Text(book.title);
             title.setFont(new Font(20));
+
+            title.setOnMouseClicked(e -> {
+               showBook();
+            });
 
             Text author = new Text(book.authors.get(0).name);
             title.setFont(new Font(16));
@@ -128,7 +163,8 @@ public class BooksController {
     }
     
     //Handle search
-    void makeSearch() {
+    public void makeSearch() {
+        if (searchText == "") return;
         System.out.println("Started search");
         //Set loading
         list.getChildren().clear();
@@ -184,10 +220,12 @@ public class BooksController {
         }
     }
 
-    public void init()
+    public void init(URL bookUrl)
     {
         //Run on start
         System.out.println("Started");
+
+        this.bookUrl = bookUrl;
 
         try {
             List<String> categories = firebase.getCategories(new URL("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/categories.json"));

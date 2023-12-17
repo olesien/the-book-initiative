@@ -7,4 +7,6 @@ module com.books.thebookinitiative {
     exports com.books.thebookinitiative;
     exports com.books.thebookinitiative.openlibrary;
     opens com.books.thebookinitiative.openlibrary to javafx.fxml;
+    exports com.books.thebookinitiative.controllers;
+    opens com.books.thebookinitiative.controllers to javafx.fxml;
 }

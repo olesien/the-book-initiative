@@ -11,7 +11,7 @@ import java.util.List;
 public class Firebase {
     Req req = new Req();
 
-    List<String> getCategories(URL url) {
+    public List<String> getCategories(URL url) {
         try {
             String res = req.get(url);
 

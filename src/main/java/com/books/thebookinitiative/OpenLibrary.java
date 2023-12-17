@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import static java.lang.String.format;
 
 public class OpenLibrary {
-    BooksList getBooksBySubject(String subject, int currentPage, int per) throws IOException {
+    public BooksList getBooksBySubject(String subject, int currentPage, int per) throws IOException {
         Req req = new Req();
         String res = req.get(new URL(format("https://openlibrary.org/subjects/%s.json?details=false&offset=%d&limit=%d", subject, currentPage * per, per)));
 
@@ -21,7 +21,7 @@ public class OpenLibrary {
         return booksList;
     }
 
-    BookSearch getBooksBySearch(String searchText, int currentPage, int per) throws IOException {
+    public BookSearch getBooksBySearch(String searchText, int currentPage, int per) throws IOException {
         String url = format("https://openlibrary.org/search.json?q=%s&offset=%d&limit=%d", searchText, currentPage * per, per);
         System.out.println(url);
         Req req = new Req();
