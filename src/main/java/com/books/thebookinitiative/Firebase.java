@@ -8,6 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.lang.String.format;
+
 public class Firebase {
     Req req = new Req();
 
@@ -17,6 +19,18 @@ public class Firebase {
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             return gson.fromJson(res, new TypeToken<List<String>>(){}.getType());
+
+        }
+        catch (IOException e) {e.printStackTrace();}
+        return new ArrayList<>();
+    }
+
+    public List<Review> getReviewsByBookId(String bookId) {
+        try {
+            String res = req.get(new URL(format("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/reviews/%s.json", bookId)));
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.fromJson(res, new TypeToken<List<Review>>(){}.getType());
 
         }
         catch (IOException e) {e.printStackTrace();}

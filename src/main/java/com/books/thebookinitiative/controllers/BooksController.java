@@ -69,7 +69,8 @@ public class BooksController {
        
     }
 
-    void showBook(String key, Author author) {
+    void showBook(String key, Author author, Integer cover_id) {
+        System.out.println(cover_id);
         System.out.println("Change screen");
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(bookUrl);
@@ -85,7 +86,7 @@ public class BooksController {
 
         BookController controller = fxmlLoader.getController(); //Get controller ref before scene is made
 
-        Scene scene = new Scene(parent, 600, 600);
+        Scene scene = new Scene(parent, 600, 800);
         stage.setScene(scene);
         controller.init(key, author);
         stage.setTitle("The Book Initiative");
@@ -104,7 +105,7 @@ public class BooksController {
             title.setFont(new Font(20));
 
             title.setOnMouseClicked(e -> {
-               showBook(book.key, book.authors.get(0));
+               showBook(book.key, book.authors.get(0), book.cover_id);
             });
 
             Text author = new Text(book.authors.get(0).name);

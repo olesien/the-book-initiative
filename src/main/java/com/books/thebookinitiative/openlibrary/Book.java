@@ -15,9 +15,9 @@ public class Book {
 
     //public LibraryKey type;
 
-    //public ArrayList<String> subjects;
+    public ArrayList<String> subjects;
 
-    //public ArrayList<Integer> covers;
+    public ArrayList<Integer> covers;
 
     //public String first_publish_date;
 
