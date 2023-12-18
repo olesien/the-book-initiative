@@ -3,6 +3,7 @@ package com.books.thebookinitiative;
 import java.io.IOException;
 import java.net.URL;
 
+import com.books.thebookinitiative.openlibrary.Book;
 import com.books.thebookinitiative.openlibrary.BooksList;
 import com.books.thebookinitiative.openlibrary.BookSearch;
 import com.google.gson.Gson;
@@ -32,6 +33,17 @@ public class OpenLibrary {
 
         System.out.println(booksList);
         return booksList;
+    }
+
+    public Book getBook (String key) throws IOException {
+        String url = format("https://openlibrary.org%s", key);
+        System.out.println(url);
+        Req req = new Req();
+        String res = req.get(new URL(url));
+
+        Gson gson = new Gson();
+        Book book = gson.fromJson(res, Book.class);
+        return book;
     }
 }
 

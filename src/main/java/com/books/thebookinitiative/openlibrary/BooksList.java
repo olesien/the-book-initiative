@@ -10,6 +10,6 @@ public class BooksList {
 
     public String subject_type;
     public Integer work_count;
-    public ArrayList<Book> works;
+    public ArrayList<Works> works;
 }
 

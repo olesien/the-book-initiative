@@ -21,12 +21,13 @@ public class Req {
 
     public String get(URL url) throws IOException {
         String METHOD = "GET";
-        String AUTH_STRING = ""; // Set this as required or comment it out.
+        String AUTH_STRING = "";
 
         String response;
 
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestMethod(METHOD);
+        conn.setRequestProperty("Accept", "application/json");
         conn.setDoOutput(false);
         conn.setRequestProperty("Authorization", AUTH_STRING);
         System.out.println("Response Code: " + conn.getResponseCode());

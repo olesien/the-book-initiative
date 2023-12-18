@@ -1,12 +1,8 @@
 package com.books.thebookinitiative.controllers;
 
-import com.books.thebookinitiative.BookApplication;
 import com.books.thebookinitiative.Firebase;
 import com.books.thebookinitiative.OpenLibrary;
-import com.books.thebookinitiative.openlibrary.Author;
-import com.books.thebookinitiative.openlibrary.Book;
-import com.books.thebookinitiative.openlibrary.BookSearch;
-import com.books.thebookinitiative.openlibrary.BooksList;
+import com.books.thebookinitiative.openlibrary.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -73,7 +69,7 @@ public class BooksController {
        
     }
 
-    void showBook() {
+    void showBook(String key, Author author) {
         System.out.println("Change screen");
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(bookUrl);
@@ -91,12 +87,12 @@ public class BooksController {
 
         Scene scene = new Scene(parent, 600, 600);
         stage.setScene(scene);
-        controller.init();
+        controller.init(key, author);
         stage.setTitle("The Book Initiative");
         stage.show();
     }
 
-    public void renderBooks(ArrayList<Book> books, int total_books) {
+    public void renderBooks(ArrayList<Works> books, int total_books) {
         //Clear items
         list.getChildren().clear();
         books.forEach(book -> {
@@ -108,7 +104,7 @@ public class BooksController {
             title.setFont(new Font(20));
 
             title.setOnMouseClicked(e -> {
-               showBook();
+               showBook(book.key, book.authors.get(0));
             });
 
             Text author = new Text(book.authors.get(0).name);
@@ -173,8 +169,8 @@ public class BooksController {
         try {
             BookSearch booksList = openLibraryAPI.getBooksBySearch(searchText, currentPage, per);
 
-            ArrayList<Book> books = booksList.docs.stream().map(doc -> {
-                Book book = new Book();
+            ArrayList<Works> books = booksList.docs.stream().map(doc -> {
+                Works book = new Works();
                 book.key = doc.key;
                 book.subject = doc.subject;
                 book.title = doc.title;
