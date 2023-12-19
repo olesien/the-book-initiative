@@ -22,7 +22,7 @@ public class BookApplication extends Application {
 
         Scene scene = new Scene(parent, 600, 800);
         stage.setScene(scene);
-        controller.init(getClass().getResource("book-view.fxml"));
+        controller.init(getClass().getResource("book-view.fxml"), getClass().getResource("add-review.fxml"));
 
         stage.setTitle("The Book Initiative");
         stage.show();

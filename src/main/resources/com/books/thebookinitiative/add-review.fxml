@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.books.thebookinitiative.controllers.AddReviewController">
+  <content>
+
+  </content>
+   <content>
+      <BorderPane prefHeight="575.0" prefWidth="555.0">
+         <top>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Make a review" textAlignment="CENTER" wrappingWidth="122.13671875" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+         </top>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Name" />
+                  <TextField fx:id="nameField" prefHeight="25.0" prefWidth="494.0" />
+                  <Label text="Title" />
+                  <TextField fx:id="titleField" prefHeight="25.0" prefWidth="494.0" />
+                  <Label prefHeight="17.0" prefWidth="67.0" text="Description" />
+                  <TextField fx:id="descriptionField" prefHeight="104.0" prefWidth="535.0" />
+                  <Label text="Review score" />
+                  <HBox prefHeight="59.0" prefWidth="535.0" spacing="5.0">
+                     <children>
+                        <ImageView fx:id="rating1" fitHeight="40.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="rating2" fitHeight="40.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="rating3" fitHeight="40.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="rating4" fitHeight="40.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="rating5" fitHeight="40.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </HBox>
+                  <Button mnemonicParsing="false" text="Submit" onAction="#submitReview" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <BorderPane.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </BorderPane.margin>
+            </VBox>
+         </center>
+      </BorderPane>
+   </content>
+</ScrollPane>

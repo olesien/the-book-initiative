@@ -37,6 +37,8 @@ import static java.lang.String.format;
 
 public class BooksController {
     URL bookUrl;
+
+    URL addReviewUrl;
     OpenLibrary openLibraryAPI = new OpenLibrary();
 
     Firebase firebase = new Firebase();
@@ -70,8 +72,6 @@ public class BooksController {
     }
 
     void showBook(String key, Author author, Integer cover_id) {
-        System.out.println(cover_id);
-        System.out.println("Change screen");
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(bookUrl);
         Stage stage = new Stage();
@@ -88,7 +88,7 @@ public class BooksController {
 
         Scene scene = new Scene(parent, 600, 800);
         stage.setScene(scene);
-        controller.init(key, author);
+        controller.init(key, author, addReviewUrl);
         stage.setTitle("The Book Initiative");
         stage.show();
     }
@@ -217,12 +217,13 @@ public class BooksController {
         }
     }
 
-    public void init(URL bookUrl)
+    public void init(URL bookUrl, URL addReviewUrl)
     {
         //Run on start
         System.out.println("Started");
 
         this.bookUrl = bookUrl;
+        this.addReviewUrl = addReviewUrl;
 
         try {
             List<String> categories = firebase.getCategories(new URL("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/categories.json"));

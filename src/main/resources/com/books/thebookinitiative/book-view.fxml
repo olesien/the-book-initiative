@@ -75,7 +75,7 @@
                               </Text>
                               <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Make a review">
+                                    <Button mnemonicParsing="false" text="Make a review" onAction="#onMakeReview">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin>
