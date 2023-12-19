@@ -50,7 +50,7 @@
                <center>
                   <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                      <left>
-                        <VBox alignment="TOP_CENTER" prefHeight="372.0" prefWidth="252.0" BorderPane.alignment="CENTER">
+                        <VBox alignment="TOP_CENTER" prefHeight="372.0" prefWidth="252.0" spacing="5.0" BorderPane.alignment="CENTER">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Subjects" wrappingWidth="61.666015625">
                                  <font>
@@ -66,16 +66,21 @@
                         </VBox>
                      </left>
                      <right>
-                        <VBox alignment="TOP_CENTER" prefHeight="372.0" prefWidth="268.0" BorderPane.alignment="CENTER">
+                        <VBox alignment="TOP_CENTER" prefHeight="372.0" prefWidth="268.0" spacing="5.0" BorderPane.alignment="CENTER">
                            <children>
                               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Reviews">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
                               </Text>
+                              <Text fx:id="reviewText" strokeType="OUTSIDE" strokeWidth="0.0" text="- / 5" textAlignment="CENTER" wrappingWidth="80">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
                               <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="5.0">
                                  <children>
-                                    <Button mnemonicParsing="false" text="Make a review" onAction="#onMakeReview">
+                                    <Button mnemonicParsing="false" onAction="#onMakeReview" text="Make a review">
                                        <VBox.margin>
                                           <Insets top="5.0" />
                                        </VBox.margin>

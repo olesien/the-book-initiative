@@ -30,8 +30,12 @@ import java.util.List;
 import static java.lang.String.format;
 
 public class BookController {
+
+    String key;
     String bookId;
     URL addReviewUrl;
+
+    Author authorObject;
     OpenLibrary openLibraryAPI = new OpenLibrary();
 
     Firebase firebase = new Firebase();
@@ -55,6 +59,9 @@ public class BookController {
     VBox reviews;
 
     @FXML
+    Text reviewText;
+
+    @FXML
     protected void onMakeReview() {
         System.out.println("Changing screen to be reviews");
         FXMLLoader fxmlLoader = new FXMLLoader();
@@ -71,20 +78,52 @@ public class BookController {
 
         AddReviewController controller = fxmlLoader.getController(); //Get controller ref before scene is made
 
-        Scene scene = new Scene(parent, 600, 800);
+        Scene scene = new Scene(parent, 600, 400);
         stage.setScene(scene);
-        controller.init(bookId);
+        controller.init(stage, bookId, this);
         stage.setTitle("The Book Initiative");
         stage.show();
     }
 
-    public void init(String key, Author authorObject, URL addReviewUrl)
-    {
-        String[] splitKey = key.split("/");
-        String bookId =splitKey[splitKey.length - 1];
-        System.out.println(bookId);
-        this.bookId = bookId;
-        this.addReviewUrl = addReviewUrl;
+    public void getReviews() {
+        List<Review> reviewList = firebase.getReviewsByBookId(bookId);
+
+
+        if (reviewList != null) {
+            double averageReview = (double) reviewList.stream().mapToInt(number -> number.count).sum() / (double) reviewList.size();
+
+            reviewText.setText(format("%.1f / 5", averageReview));
+
+            reviews.getChildren().clear();
+            reviewList.forEach(r -> {
+                Text name = new Text(r.name);
+                name.setFont(new Font(14));
+
+                Text title = new Text(r.title);
+                title.setFont(new Font(14));
+
+                Text content = new Text(r.content);
+                Text reviewText = new Text( r.count + " / 5");
+
+                BorderPane reviewTop = new BorderPane();
+                reviewTop.setLeft(name);
+                reviewTop.setRight(reviewText);
+
+                VBox reviewContent = new VBox(title, content);
+                reviewContent.setPadding(new Insets(10, 10, 10, 10));
+                reviewContent.setSpacing(5);
+                reviewContent.setBackground(new Background(new BackgroundFill(Color.rgb(230, 247, 255), CornerRadii.EMPTY, Insets.EMPTY)));
+
+                VBox review = new VBox(reviewTop, reviewContent);
+                review.setMaxWidth(Double.MAX_VALUE);
+                review.setMaxHeight(Double.MAX_VALUE);
+                review.setSpacing(10);
+                reviews.getChildren().add(review);
+            });
+        }
+    }
+
+    public void fetchBook() {
         try {
             Book book = openLibraryAPI.getBook(key);
             System.out.println(book);
@@ -98,40 +137,24 @@ public class BookController {
 
             subjects.setItems(FXCollections.observableArrayList(book.subjects));
 
-            List<Review> reviewList = firebase.getReviewsByBookId(bookId);
-            System.out.println(reviewList);
-            if (reviewList != null) {
-                reviewList.forEach(r -> {
-                    Text name = new Text(r.name);
-                    name.setFont(new Font(14));
-
-                    Text title = new Text(r.title);
-                    title.setFont(new Font(14));
-
-                    Text content = new Text(r.content);
-                    Text reviewText = new Text( r.count + " / 5");
-
-                    BorderPane reviewTop = new BorderPane();
-                    reviewTop.setLeft(name);
-                    reviewTop.setRight(reviewText);
-
-                    VBox reviewContent = new VBox(title, content);
-                    reviewContent.setPadding(new Insets(10, 10, 10, 10));
-                    reviewContent.setSpacing(5);
-                    reviewContent.setBackground(new Background(new BackgroundFill(Color.rgb(230, 247, 255), CornerRadii.EMPTY, Insets.EMPTY)));
-
-                    VBox review = new VBox(reviewTop, reviewContent);
-                    review.setMaxWidth(Double.MAX_VALUE);
-                    review.setMaxHeight(Double.MAX_VALUE);
-                    review.setSpacing(10);
-                    reviews.getChildren().add(review);
-                });
-            }
+            getReviews();
 
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void init(String key, Author authorObject, URL addReviewUrl)
+    {
+        String[] splitKey = key.split("/");
+        String bookId =splitKey[splitKey.length - 1];
+        System.out.println(bookId);
+        this.key = key;
+        this.bookId = bookId;
+        this.addReviewUrl = addReviewUrl;
+        this.authorObject = authorObject;
+        fetchBook();
     }
 
 }

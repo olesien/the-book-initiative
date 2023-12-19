@@ -12,6 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.TextArea?>
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.books.thebookinitiative.controllers.AddReviewController">
   <content>
 
@@ -36,7 +37,7 @@
                   <Label text="Title" />
                   <TextField fx:id="titleField" prefHeight="25.0" prefWidth="494.0" />
                   <Label prefHeight="17.0" prefWidth="67.0" text="Description" />
-                  <TextField fx:id="descriptionField" prefHeight="104.0" prefWidth="535.0" />
+                  <TextArea fx:id="descriptionField" prefHeight="104.0" prefWidth="535.0" />
                   <Label text="Review score" />
                   <HBox prefHeight="59.0" prefWidth="535.0" spacing="5.0">
                      <children>

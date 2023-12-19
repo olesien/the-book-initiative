@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,6 +19,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -26,10 +28,11 @@ import java.util.List;
 import static java.lang.String.format;
 
 public class AddReviewController {
+    Stage stage;
+    BookController bookController;
     String bookId;
 
     int ratingNumber = 0;
-    OpenLibrary openLibraryAPI = new OpenLibrary();
 
     Firebase firebase = new Firebase();
 
@@ -40,7 +43,7 @@ public class AddReviewController {
     TextField titleField;
 
     @FXML
-    TextField descriptionField;
+    TextArea descriptionField;
 
     @FXML
     ImageView rating1;
@@ -61,6 +64,8 @@ public class AddReviewController {
     protected void submitReview() {
         try {
             firebase.addReview(bookId, ratingNumber, nameField.getText(), titleField.getText(),descriptionField.getText());
+            bookController.getReviews(); //Refetch
+            stage.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -116,10 +121,11 @@ public class AddReviewController {
         });
     }
 
-    public void init(String bookId)
+    public void init(Stage stage, String bookId, BookController bookController)
     {
+        this.bookController = bookController;
         this.bookId = bookId;
-
+        this.stage = stage;
         Image icon = new Image("file:images/unfilled.png");
         Image iconFilled = new Image("file:images/filled.png");
         rating1.setImage(icon);
