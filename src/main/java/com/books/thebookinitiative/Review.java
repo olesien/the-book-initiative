@@ -3,7 +3,7 @@ package com.books.thebookinitiative;
 public class Review {
     public String content;
 
-    public String count;
+    public int count;
 
     public String name;
 

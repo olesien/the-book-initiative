@@ -1,9 +1,6 @@
 package com.books.thebookinitiative;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -38,5 +35,29 @@ public class Req {
         System.out.println("Response Body: " + response);
 
         return response;
+    }
+
+    public void put(URL url, String data) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        conn.setRequestMethod("PUT");
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Accept", "application/json");
+        conn.setDoOutput(true);
+
+        try(OutputStream os = conn.getOutputStream()) {
+            byte[] input = data.getBytes("utf-8");
+            os.write(input, 0, input.length);
+        }
+
+        try(BufferedReader br = new BufferedReader(
+                new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+            StringBuilder response = new StringBuilder();
+            String responseLine = null;
+            while ((responseLine = br.readLine()) != null) {
+                response.append(responseLine.trim());
+            }
+            System.out.println(response.toString());
+        }
+
     }
 }

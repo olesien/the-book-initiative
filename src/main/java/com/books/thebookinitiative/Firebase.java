@@ -1,9 +1,12 @@
 package com.books.thebookinitiative;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,28 +40,40 @@ public class Firebase {
         return new ArrayList<>();
     }
 
-    /*void setNote(String note) throws IOException {
+    public void addReview(String bookId, int ratingNumber, String name, String title, String description) throws IOException {
+        System.out.println(bookId);
+        System.out.println(ratingNumber);
+        System.out.println(name);
+        System.out.println(title);
+        System.out.println(description);
 
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("PUT");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-        String jsonInputString = "{\"note\": \"" + note + "\"}";
+        String textUrl = "https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/reviews/" + bookId + ".json";
+        System.out.println(textUrl);
+        URL url = new URL(textUrl);
 
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
+        List<Review> reviews = getReviewsByBookId(bookId);
+
+        if (reviews == null) {
+            reviews = new ArrayList<>();
         }
+        Review newReview = new Review();
+        newReview.content = description;
+        newReview.name = name;
+        newReview.title = title;
+        newReview.count = ratingNumber;
+        reviews.add(newReview);
+        JsonArray reviewArr = new JsonArray();
 
-        try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-            StringBuilder response = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                response.append(responseLine.trim());
-            }
-            System.out.println(response.toString());
-        }
-    }*/
+        reviews.forEach(review -> {
+            JsonObject reviewObject = new JsonObject();
+            reviewObject.addProperty("content", review.content);
+            reviewObject.addProperty("count", review.count);
+            reviewObject.addProperty("name", review.name);
+            reviewObject.addProperty("title", review.title);
+            reviewArr.add(reviewObject);
+        });
+        System.out.println(reviewArr);
+        req.put(url, reviewArr.toString());
+
+    }
 }

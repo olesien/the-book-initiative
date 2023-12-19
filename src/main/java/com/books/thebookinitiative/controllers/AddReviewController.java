@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -58,7 +59,11 @@ public class AddReviewController {
 
     @FXML
     protected void submitReview() {
-
+        try {
+            firebase.addReview(bookId, ratingNumber, nameField.getText(), titleField.getText(),descriptionField.getText());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void setRating (int newRating) {
@@ -89,7 +94,6 @@ public class AddReviewController {
     public void setEvents(ImageView rating, int value, Image icon, Image iconFilled) {
         rating.setImage(icon);
         rating.hoverProperty().addListener((observable, oldValue, newValue) -> {
-            System.out.println(ratingNumber);
                 if (ratingNumber != 5 && value != 5) {
                     //Empty all first
                     fillIcons(5, icon);
