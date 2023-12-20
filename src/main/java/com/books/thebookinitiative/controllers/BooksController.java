@@ -1,5 +1,6 @@
 package com.books.thebookinitiative.controllers;
 
+import com.books.thebookinitiative.BookApplication;
 import com.books.thebookinitiative.Firebase;
 import com.books.thebookinitiative.OpenLibrary;
 import com.books.thebookinitiative.Review;
@@ -38,9 +39,8 @@ import java.util.stream.Collectors;
 import static java.lang.String.format;
 
 public class BooksController {
-    URL bookUrl;
 
-    URL addReviewUrl;
+    BookApplication bookApplication;
     OpenLibrary openLibraryAPI = new OpenLibrary();
 
     Firebase firebase = new Firebase();
@@ -74,25 +74,7 @@ public class BooksController {
     }
 
     void showBook(String key, Author author, Integer cover_id) {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(bookUrl);
-        Stage stage = new Stage();
-        Parent parent = null;//Load the fxml
-        try {
-            parent = fxmlLoader.load();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        Image icon = new Image("file:images/bookicon.png");
-        stage.getIcons().add(icon);
-
-        BookController controller = fxmlLoader.getController(); //Get controller ref before scene is made
-
-        Scene scene = new Scene(parent, 600, 800);
-        stage.setScene(scene);
-        controller.init(key, author, addReviewUrl);
-        stage.setTitle("The Book Initiative");
-        stage.show();
+        bookApplication.openBook(key, author);
     }
 
     public void renderBooks(ArrayList<Works> books, int total_books) {
@@ -116,12 +98,20 @@ public class BooksController {
             Text title = new Text(book.title);
             title.setFont(new Font(20));
 
+            Author authorObject = book.authors.get(0);
             title.setOnMouseClicked(e -> {
-               showBook(book.key, book.authors.get(0), book.cover_id);
+               showBook(book.key, authorObject, book.cover_id);
             });
 
-            Text author = new Text(book.authors.get(0).name);
+            Text author = new Text(authorObject.name);
             title.setFont(new Font(16));
+
+            author.setOnMouseClicked(e -> {
+                String[] splitAuthorKey = authorObject.key.split("/");
+                String authorId = splitAuthorKey[splitAuthorKey.length - 1]; //The actual book id
+
+                bookApplication.openAuthor(authorId);
+            });
 
             Text desc = new Text(book.first_publish_year.toString());
             title.setFont(new Font(14));
@@ -237,13 +227,12 @@ public class BooksController {
         }
     }
 
-    public void init(URL bookUrl, URL addReviewUrl)
+    public void init(BookApplication bookApplication)
     {
         //Run on start
         System.out.println("Started");
 
-        this.bookUrl = bookUrl;
-        this.addReviewUrl = addReviewUrl;
+        this.bookApplication = bookApplication;
 
         try {
             List<String> categories = firebase.getCategories(new URL("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/categories.json"));

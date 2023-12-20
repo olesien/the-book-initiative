@@ -1,6 +1,7 @@
 package com.books.thebookinitiative.controllers;
 
 
+import com.books.thebookinitiative.BookApplication;
 import com.books.thebookinitiative.Firebase;
 import com.books.thebookinitiative.OpenLibrary;
 import com.books.thebookinitiative.Review;
@@ -30,10 +31,9 @@ import java.util.List;
 import static java.lang.String.format;
 
 public class BookController {
-
+    BookApplication bookApplication;
     String key;
     String bookId;
-    URL addReviewUrl;
 
     Author authorObject;
     OpenLibrary openLibraryAPI = new OpenLibrary();
@@ -64,25 +64,8 @@ public class BookController {
     @FXML
     protected void onMakeReview() {
         System.out.println("Changing screen to be reviews");
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(addReviewUrl);
-        Stage stage = new Stage();
-        Parent parent = null;//Load the fxml
-        try {
-            parent = fxmlLoader.load();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        Image icon = new Image("file:images/bookicon.png");
-        stage.getIcons().add(icon);
 
-        AddReviewController controller = fxmlLoader.getController(); //Get controller ref before scene is made
-
-        Scene scene = new Scene(parent, 600, 400);
-        stage.setScene(scene);
-        controller.init(stage, bookId, this);
-        stage.setTitle("The Book Initiative");
-        stage.show();
+        bookApplication.openAddReview(this, bookId);
     }
 
     public void getReviews() {
@@ -129,6 +112,12 @@ public class BookController {
             System.out.println(book);
             title.setText(book.title);
             author.setText(authorObject.name);
+            author.setOnMouseClicked(e -> {
+                String[] splitKey = authorObject.key.split("/");
+                String authorId = splitKey[splitKey.length - 1]; //The actual book id
+
+                bookApplication.openAuthor(authorId);
+            });
 
             description.setText(book.description);
 
@@ -151,14 +140,15 @@ public class BookController {
         }
     }
 
-    public void init(String key, Author authorObject, URL addReviewUrl)
+    public void init(BookApplication bookApplication, String key, Author authorObject)
     {
+
         String[] splitKey = key.split("/");
         String bookId =splitKey[splitKey.length - 1];
         System.out.println(bookId);
+        this.bookApplication = bookApplication;
         this.key = key;
         this.bookId = bookId;
-        this.addReviewUrl = addReviewUrl;
         this.authorObject = authorObject;
         fetchBook();
     }
