@@ -76,6 +76,7 @@ public class AuthorController {
 
             title.setOnMouseClicked(e -> {
                 Author author = new Author();
+                System.out.println(book.key);
                 bookApplication.openBook(book.key, author);
             });
 
@@ -94,7 +95,7 @@ public class AuthorController {
             Text reviewText = new Text("- / 5");
             reviewText.setTextAlignment(TextAlignment.CENTER);
 
-            //If the reviewList actually has any content, we wanna change the text
+            //If the reviewList actually has any content, we want to change the text
             if (reviewList != null) {
                 double averageReview = (double) reviewList.stream().mapToInt(number -> number.count).sum() / (double) reviewList.size();
 

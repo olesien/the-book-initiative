@@ -130,7 +130,10 @@ public class BookController {
                 cover.setImage(bookCover2);
             }).start();
 
-            subjects.setItems(FXCollections.observableArrayList(book.subjects));
+            if (book.subjects != null) {
+                subjects.setItems(FXCollections.observableArrayList(book.subjects));
+            }
+
 
             getReviews();
 
