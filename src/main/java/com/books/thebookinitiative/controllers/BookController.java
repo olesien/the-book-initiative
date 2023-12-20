@@ -132,8 +132,14 @@ public class BookController {
 
             description.setText(book.description);
 
-            Image bookCover = new Image(format("https://covers.openlibrary.org/b/id/%d-L.jpg", book.covers.get(0)), 180, 250, false, false);
+            Image bookCover = new Image("file:images/Preview.png", 180, 250, false, false);
             cover.setImage(bookCover);
+
+            //Load in the images later
+            new Thread(() -> {
+                Image bookCover2 = new Image(format("https://covers.openlibrary.org/b/id/%d-L.jpg", book.covers.get(0)), 180, 250, false, false);
+                cover.setImage(bookCover2);
+            }).start();
 
             subjects.setItems(FXCollections.observableArrayList(book.subjects));
 
