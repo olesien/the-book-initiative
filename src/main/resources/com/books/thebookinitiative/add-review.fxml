@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Text?>
 
 <?import javafx.scene.control.TextArea?>
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.books.thebookinitiative.controllers.AddReviewController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="566.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.books.thebookinitiative.controllers.AddReviewController">
   <content>
 
   </content>

@@ -6,7 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,12 +13,11 @@ import java.util.List;
 
 import static java.lang.String.format;
 
-public class Firebase {
-    Req req = new Req();
+public class Firebase extends Req {
 
     public List<String> getCategories(URL url) {
         try {
-            String res = req.get(url);
+            String res = get(url);
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             return gson.fromJson(res, new TypeToken<List<String>>(){}.getType());
@@ -31,7 +29,7 @@ public class Firebase {
 
     public List<Review> getReviewsByBookId(String bookId) {
         try {
-            String res = req.get(new URL(format("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/reviews/%s.json", bookId)));
+            String res = get(new URL(format("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/reviews/%s.json", bookId)));
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             return gson.fromJson(res, new TypeToken<List<Review>>(){}.getType());
@@ -43,7 +41,7 @@ public class Firebase {
 
     public HashMap<String, List<Review>> getAllReviews() {
         try {
-            String res = req.get(new URL(format("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/reviews.json")));
+            String res = get(new URL("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/reviews.json"));
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             return gson.fromJson(res, new TypeToken<HashMap<String, List<Review>>>(){}.getType());
@@ -86,7 +84,7 @@ public class Firebase {
             reviewArr.add(reviewObject);
         });
         System.out.println(reviewArr);
-        req.put(url, reviewArr.toString());
+        put(url, reviewArr.toString());
 
     }
 }

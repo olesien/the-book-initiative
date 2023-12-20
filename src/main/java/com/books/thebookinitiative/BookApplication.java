@@ -11,10 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.net.URL;
-
 public class BookApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
@@ -37,7 +34,7 @@ public class BookApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("author-view.fxml"));
         Stage stage = new Stage();
-        Parent parent = null;//Load the fxml
+        Parent parent; //Load the fxml
         try {
             parent = fxmlLoader.load();
         } catch (IOException ex) {
@@ -59,7 +56,7 @@ public class BookApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("add-review.fxml"));
         Stage stage = new Stage();
-        Parent parent = null;//Load the fxml
+        Parent parent;//Load the fxml
         try {
             parent = fxmlLoader.load();
         } catch (IOException ex) {
@@ -81,7 +78,7 @@ public class BookApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource("book-view.fxml"));
         Stage stage = new Stage();
-        Parent parent = null;//Load the fxml
+        Parent parent; //Load the fxml
         try {
             parent = fxmlLoader.load();
         } catch (IOException ex) {

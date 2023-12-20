@@ -5,15 +5,10 @@ import com.books.thebookinitiative.Firebase;
 import com.books.thebookinitiative.OpenLibrary;
 import com.books.thebookinitiative.Review;
 import com.books.thebookinitiative.openlibrary.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Pagination;
 import javafx.scene.control.TextField;
@@ -25,8 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -55,7 +48,7 @@ public class BooksController {
     private TextField search;
 
     @FXML
-    private ComboBox category;
+    private ComboBox<String> category;
 
     @FXML
     private VBox list;
@@ -63,17 +56,17 @@ public class BooksController {
     @FXML
     private BorderPane app;
 
-    public void changePange(int newPage) {
+    public void changePage(int newPage) {
         currentPage = newPage;
         if (search.getLength() > 0) {
             makeSearch();
         } else {
-            fetchBooksBySubject(category.getValue().toString().toLowerCase());
+            fetchBooksBySubject(category.getValue().toLowerCase());
         }
        
     }
 
-    void showBook(String key, Author author, Integer cover_id) {
+    void showBook(String key, Author author) {
         bookApplication.openBook(key, author);
     }
 
@@ -97,7 +90,7 @@ public class BooksController {
 
             Author authorObject = book.authors.get(0);
             title.setOnMouseClicked(e -> {
-               showBook(book.key, authorObject, book.cover_id);
+               showBook(book.key, authorObject);
             });
 
             Text author = new Text(authorObject.name);
@@ -123,7 +116,7 @@ public class BooksController {
             Text reviewText = new Text("- / 5");
             reviewText.setTextAlignment(TextAlignment.CENTER);
 
-            //If the reviewList actually has any content, we wanna change the text
+            //If the reviewList actually has any content, we want to change the text
             if (reviewList != null) {
                 double averageReview = (double) reviewList.stream().mapToInt(number -> number.count).sum() / (double) reviewList.size();
 
@@ -151,7 +144,7 @@ public class BooksController {
             pagination.currentPageIndexProperty().addListener((obs, oldIndex, newIndex) ->
             {
                 pagination.setDisable(true);
-                changePange(newIndex.intValue());
+                changePage(newIndex.intValue());
                 pagination.setDisable(false);
             });
 
@@ -170,6 +163,7 @@ public class BooksController {
     public void makeSearch() {
         if (searchText == "") return;
         System.out.println("Started search");
+
         //Set loading
         list.getChildren().clear();
         Text loadingText = new Text("Searching...");
@@ -197,11 +191,11 @@ public class BooksController {
                     i.getAndIncrement();
                     return author;
                 }).collect(Collectors
-                        .toCollection(ArrayList::new)); ;
+                        .toCollection(ArrayList::new));
                 book.authors = authors;
                 return book;
             }).collect(Collectors
-                    .toCollection(ArrayList::new)); ;
+                    .toCollection(ArrayList::new));
 
             renderBooks(books, booksList.numFound);
 
@@ -241,25 +235,18 @@ public class BooksController {
         }
 
         category.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            System.out.println("CATEGORY: " + newValue.toString());
+            System.out.println("CATEGORY: " + newValue);
 
-            fetchBooksBySubject(newValue.toString().toLowerCase());
+            fetchBooksBySubject(newValue.toLowerCase());
         });
 
-        search.textProperty().addListener((observable, oldValue, newValue) -> {
-            searchText = newValue;
-        });
+        search.textProperty().addListener((observable, oldValue, newValue) -> searchText = newValue);
 
-        search.focusedProperty().addListener(new ChangeListener<Boolean>()
-        {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
+        search.focusedProperty().addListener((arg0, oldPropertyValue, newPropertyValue) -> {
+            if (!newPropertyValue)
             {
-                if (!newPropertyValue)
-                {
-                    //Out of foucs
-                    makeSearch();
-                }
+                //Out of focus
+                makeSearch();
             }
         });
 

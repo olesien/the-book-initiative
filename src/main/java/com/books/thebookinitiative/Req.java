@@ -3,13 +3,13 @@ package com.books.thebookinitiative;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
 
 public class Req {
 
     static String getResponse(InputStream stream) throws IOException {
         String buffer;
-        StringBuffer response = new StringBuffer();
+        StringBuilder response = new StringBuilder();
         BufferedReader res = new BufferedReader(new InputStreamReader(stream));
         while ((buffer = res.readLine()) != null)
             response.append(buffer);
@@ -45,18 +45,18 @@ public class Req {
         conn.setDoOutput(true);
 
         try(OutputStream os = conn.getOutputStream()) {
-            byte[] input = data.getBytes("utf-8");
+            byte[] input = data.getBytes(StandardCharsets.UTF_8);
             os.write(input, 0, input.length);
         }
 
         try(BufferedReader br = new BufferedReader(
-                new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
             StringBuilder response = new StringBuilder();
-            String responseLine = null;
+            String responseLine;
             while ((responseLine = br.readLine()) != null) {
                 response.append(responseLine.trim());
             }
-            System.out.println(response.toString());
+            System.out.println(response);
         }
 
     }

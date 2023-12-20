@@ -1,31 +1,13 @@
 package com.books.thebookinitiative.controllers;
 
-
 import com.books.thebookinitiative.Firebase;
-import com.books.thebookinitiative.OpenLibrary;
-import com.books.thebookinitiative.Review;
-import com.books.thebookinitiative.openlibrary.Author;
-import com.books.thebookinitiative.openlibrary.Book;
-import javafx.beans.value.ChangeListener;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.util.List;
-
-import static java.lang.String.format;
 
 public class AddReviewController {
     Stage stage;

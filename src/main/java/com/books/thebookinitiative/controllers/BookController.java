@@ -1,20 +1,14 @@
 package com.books.thebookinitiative.controllers;
 
-
 import com.books.thebookinitiative.BookApplication;
 import com.books.thebookinitiative.Firebase;
 import com.books.thebookinitiative.OpenLibrary;
 import com.books.thebookinitiative.Review;
 import com.books.thebookinitiative.openlibrary.Author;
 import com.books.thebookinitiative.openlibrary.Book;
-import com.books.thebookinitiative.openlibrary.BooksList;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,12 +16,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
-
 import static java.lang.String.format;
 
 public class BookController {
@@ -53,7 +43,7 @@ public class BookController {
     ImageView cover;
 
     @FXML
-    ListView subjects;
+    ListView<String> subjects;
 
     @FXML
     VBox reviews;
