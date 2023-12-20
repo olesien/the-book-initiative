@@ -20,7 +20,7 @@ public class BookApplication extends Application {
 
         BooksController controller = fxmlLoader.getController(); //Get controller ref before scene is made
 
-        Scene scene = new Scene(parent, 600, 800);
+        Scene scene = new Scene(parent, 650, 800);
         stage.setScene(scene);
         controller.init(getClass().getResource("book-view.fxml"), getClass().getResource("add-review.fxml"));
 

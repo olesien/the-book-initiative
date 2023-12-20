@@ -2,6 +2,7 @@ package com.books.thebookinitiative.controllers;
 
 import com.books.thebookinitiative.Firebase;
 import com.books.thebookinitiative.OpenLibrary;
+import com.books.thebookinitiative.Review;
 import com.books.thebookinitiative.openlibrary.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -94,9 +96,19 @@ public class BooksController {
     }
 
     public void renderBooks(ArrayList<Works> books, int total_books) {
+        HashMap<String, List<Review>> firebaseAllReviews = firebase.getAllReviews(); //Get the reviews
+
+
         //Clear items
         list.getChildren().clear();
         books.forEach(book -> {
+            String[] splitKey = book.key.split("/");
+            String bookId =splitKey[splitKey.length - 1]; //The actual book id
+
+            List<Review> reviewList = firebaseAllReviews.get(bookId);
+
+
+
             Image bookCover = new Image("file:images/Preview.png", 90, 130, false, false);
             ImageView imageView = new ImageView(bookCover);
             VBox coverContainer = new VBox(imageView);
@@ -119,9 +131,17 @@ public class BooksController {
             bookInfo.prefWidth(236);
             bookInfo.setSpacing(15);
 
+
             //Reviews
-            Text reviewText = new Text("5 / 5");
+            Text reviewText = new Text("- / 5");
             reviewText.setTextAlignment(TextAlignment.CENTER);
+
+            //If the reviewList actually has any content, we wanna change the text
+            if (reviewList != null) {
+                double averageReview = (double) reviewList.stream().mapToInt(number -> number.count).sum() / (double) reviewList.size();
+
+                reviewText.setText(format("%.1f / 5", averageReview));
+            }
 
             HBox reviewIcons = new HBox();
             reviewIcons.setAlignment(Pos.CENTER);

@@ -20,10 +20,10 @@
          <children>
             <BorderPane fx:id="app" layoutX="7.0" layoutY="4.0" prefHeight="360.0" prefWidth="552.0">
                <top>
-                  <HBox alignment="CENTER" prefHeight="46.0" prefWidth="552.0" spacing="15.0" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" prefHeight="46.0" prefWidth="582.0" spacing="15.0" BorderPane.alignment="CENTER">
                      <children>
                         <TextField fx:id="search" prefHeight="25.0" prefWidth="212.0" promptText="Search books by title" />
-                        <ComboBox fx:id="category" prefHeight="25.0" prefWidth="129.0" promptText="Enter Category" />
+                        <ComboBox fx:id="category" prefHeight="25.0" prefWidth="149.0" promptText="Enter Category" />
                      </children>
                      <opaqueInsets>
                         <Insets />

@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -38,6 +39,18 @@ public class Firebase {
         }
         catch (IOException e) {e.printStackTrace();}
         return new ArrayList<>();
+    }
+
+    public HashMap<String, List<Review>> getAllReviews() {
+        try {
+            String res = req.get(new URL(format("https://books-initiative-default-rtdb.europe-west1.firebasedatabase.app/reviews.json")));
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.fromJson(res, new TypeToken<HashMap<String, List<Review>>>(){}.getType());
+
+        }
+        catch (IOException e) {e.printStackTrace();}
+        return new HashMap<>();
     }
 
     public void addReview(String bookId, int ratingNumber, String name, String title, String description) throws IOException {
