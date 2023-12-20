@@ -88,9 +88,6 @@ public class BooksController {
             String bookId =splitKey[splitKey.length - 1]; //The actual book id
 
             List<Review> reviewList = firebaseAllReviews.get(bookId);
-
-
-
             Image bookCover = new Image("file:images/Preview.png", 90, 130, false, false);
             ImageView imageView = new ImageView(bookCover);
             VBox coverContainer = new VBox(imageView);
