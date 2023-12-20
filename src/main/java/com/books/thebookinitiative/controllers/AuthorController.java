@@ -35,10 +35,6 @@ import static java.lang.String.format;
 public class AuthorController {
     BookApplication bookApplication;
     String key;
-    String bookId;
-    URL addReviewUrl;
-
-    Author authorObject;
     OpenLibrary openLibraryAPI = new OpenLibrary();
 
     Firebase firebase = new Firebase();
@@ -76,6 +72,9 @@ public class AuthorController {
 
             title.setOnMouseClicked(e -> {
                 Author author = new Author();
+
+                author.key =key;
+                author.name = authorName.getText();
                 System.out.println(book.key);
                 bookApplication.openBook(book.key, author);
             });
@@ -134,6 +133,7 @@ public class AuthorController {
 
     public void init(BookApplication bookApplication, String key)
     {
+        this.key = key;
         this.bookApplication = bookApplication;
         String[] splitKey = key.split("/");
         String authorId =splitKey[splitKey.length - 1];
