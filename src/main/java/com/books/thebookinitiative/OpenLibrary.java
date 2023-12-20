@@ -1,11 +1,10 @@
 package com.books.thebookinitiative;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.books.thebookinitiative.openlibrary.Book;
-import com.books.thebookinitiative.openlibrary.BooksList;
-import com.books.thebookinitiative.openlibrary.BookSearch;
+import com.books.thebookinitiative.openlibrary.*;
 import com.google.gson.Gson;
 
 import static java.lang.String.format;
@@ -44,6 +43,26 @@ public class OpenLibrary {
         Gson gson = new Gson();
         Book book = gson.fromJson(res, Book.class);
         return book;
+    }
+
+    public AuthorDetailed getAuthor (String key) throws IOException {
+        String url = format("https://openlibrary.org/authors/%s", key);
+        Req req = new Req();
+        String res = req.get(new URL(url));
+
+        Gson gson = new Gson();
+        AuthorDetailed author = gson.fromJson(res, AuthorDetailed.class);
+        return author;
+    }
+
+    public AuthorBooks booksByAuthor (String key) throws IOException {
+        String url = format("https://openlibrary.org/authors/%s/works.json?limit=50", key);
+        System.out.println(url);
+        Req req = new Req();
+        String res = req.get(new URL(url));
+
+        Gson gson = new Gson();
+        return gson.fromJson(res, AuthorBooks.class);
     }
 }
 
