@@ -168,7 +168,8 @@ public class BooksController {
         Text loadingText = new Text("Searching...");
         list.getChildren().add(loadingText);
         try {
-            BookSearch booksList = openLibraryAPI.getBooksBySearch(searchText, currentPage, per);
+            //Make the search to the open library api. Replace all spaces with - as that otherwise screws the call
+            BookSearch booksList = openLibraryAPI.getBooksBySearch(searchText.replace(" ", "-"), currentPage, per);
 
             ArrayList<Works> books = booksList.docs.stream().map(doc -> {
                 Works book = new Works();
