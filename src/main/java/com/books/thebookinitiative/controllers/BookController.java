@@ -58,6 +58,7 @@ public class BookController {
         bookApplication.openAddReview(this, bookId);
     }
 
+    //Get all the reviews and add them
     public void getReviews() {
         List<Review> reviewList = firebase.getReviewsByBookId(bookId);
 
@@ -96,17 +97,36 @@ public class BookController {
         }
     }
 
+    //Fetch the book
     public void fetchBook() {
         try {
             Book book = openLibraryAPI.getBook(key);
-            System.out.println(book);
             title.setText(book.title);
             author.setText(authorObject.name);
+
+            //Add click event on author name to change screen
             author.setOnMouseClicked(e -> {
                 String[] splitKey = authorObject.key.split("/");
                 String authorId = splitKey[splitKey.length - 1]; //The actual book id
 
                 bookApplication.openAuthor(authorId);
+            });
+
+            //Add hover on author
+            author.hoverProperty().addListener((obs, oldSelectedText, newSelectedText) -> {
+                if (oldSelectedText != null) {
+                    author.setStyle("");
+                }
+                if (newSelectedText != null) {
+                    author.setStyle("-fx-background-color: lightblue;");
+                }
+            });
+            author.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    author.setFill(Color.BLUE);
+                } else {
+                    author.setFill(Color.BLACK);
+                }
             });
 
             description.setText(book.description);

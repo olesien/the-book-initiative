@@ -78,6 +78,8 @@ public class AddReviewController {
         }
     }
 
+    //This sets the events related to hover and click on
+    //the star icons for reviews
     public void setEvents(ImageView rating, int value, Image icon, Image iconFilled) {
         rating.setImage(icon);
         rating.hoverProperty().addListener((observable, oldValue, newValue) -> {
@@ -103,6 +105,7 @@ public class AddReviewController {
         });
     }
 
+    //Init the controller and set the events and icons.
     public void init(Stage stage, String bookId, BookController bookController)
     {
         this.bookController = bookController;

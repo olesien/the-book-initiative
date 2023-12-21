@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -89,18 +90,35 @@ public class BooksController {
             title.setFont(new Font(20));
 
             Author authorObject = book.authors.get(0);
+
+            //And click and hover effect on title (takes us to BookController)
             title.setOnMouseClicked(e -> {
                showBook(book.key, authorObject);
+            });
+            title.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    title.setFill(Color.BLUE);
+                } else {
+                    title.setFill(Color.BLACK);
+                }
             });
 
             Text author = new Text(authorObject.name);
             title.setFont(new Font(16));
 
+            //And click and hover effect on author (takes us to AuthorController)
             author.setOnMouseClicked(e -> {
                 String[] splitAuthorKey = authorObject.key.split("/");
                 String authorId = splitAuthorKey[splitAuthorKey.length - 1]; //The actual book id
 
                 bookApplication.openAuthor(authorId);
+            });
+            author.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    author.setFill(Color.BLUE);
+                } else {
+                    author.setFill(Color.BLACK);
+                }
             });
 
             Text desc = new Text(book.first_publish_year.toString());
