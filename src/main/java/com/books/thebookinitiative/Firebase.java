@@ -15,7 +15,7 @@ import static java.lang.String.format;
 
 //This uses the req API call functions.
 //Acts as a middle layer between firebase and the java application
-public class Firebase extends Req {
+public class Firebase extends ApiRoot {
 
     public List<String> getCategories(URL url) {
         try {

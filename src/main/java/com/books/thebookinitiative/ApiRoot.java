@@ -5,7 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class Req {
+public class ApiRoot {
 
     static String getResponse(InputStream stream) throws IOException {
         String buffer;

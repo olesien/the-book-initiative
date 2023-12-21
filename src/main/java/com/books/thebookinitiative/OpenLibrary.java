@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 import static java.lang.String.format;
 
 //This uses the classes found in open library folder to match the JSON from the API
-public class OpenLibrary extends Req {
+public class OpenLibrary extends ApiRoot {
     public BooksList getBooksBySubject(String subject, int currentPage, int per) throws IOException {
         String res = get(new URL(format("https://openlibrary.org/subjects/%s.json?details=false&offset=%d&limit=%d", subject, currentPage * per, per)));
 
