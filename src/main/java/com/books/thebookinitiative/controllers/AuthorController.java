@@ -12,6 +12,7 @@ import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -67,6 +68,14 @@ public class AuthorController {
                 author.name = authorName.getText();
                 System.out.println(book.key);
                 bookApplication.openBook(book.key, author);
+            });
+
+            title.hoverProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue) {
+                    title.setFill(Color.BLUE);
+                } else {
+                    title.setFill(Color.BLACK);
+                }
             });
 
             title.setFont(new Font(16));

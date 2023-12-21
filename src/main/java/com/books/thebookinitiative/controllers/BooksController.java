@@ -59,6 +59,9 @@ public class BooksController {
 
     public void changePage(int newPage) {
         currentPage = newPage;
+
+        //If we have a search, ignore the category.
+        //Using both is not possible with current API
         if (search.getLength() > 0) {
             makeSearch();
         } else {
@@ -71,6 +74,7 @@ public class BooksController {
         bookApplication.openBook(key, author);
     }
 
+    //Take the array list of book objects and convert them to JavaFX elements
     public void renderBooks(ArrayList<Works> books, int total_books) {
         HashMap<String, List<Review>> firebaseAllReviews = firebase.getAllReviews(); //Get the reviews
 
